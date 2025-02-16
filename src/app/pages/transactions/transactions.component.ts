@@ -77,7 +77,16 @@ export class TransactionsComponent implements OnInit {
         this.sortedColumn,
         this.sortAscending
       ).subscribe((res: any) => {
-        this.transactions = res.data;
+        // Remove any "$" symbol from amount and balance fields if present
+        this.transactions = res.data.map((tx: any) => {
+          if (tx.amount && typeof tx.amount === 'string') {
+            tx.amount = Number(tx.amount.replace(/\$/g, ''));
+          }
+          if (tx.balance && typeof tx.balance === 'string') {
+            tx.balance = Number(tx.balance.replace(/\$/g, ''));
+          }
+          return tx;
+        });
         this.paginatedTransactions = this.transactions;
         this.count = res.count;
       });

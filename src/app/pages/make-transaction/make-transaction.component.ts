@@ -75,7 +75,20 @@ export class MakeTransactionComponent implements OnInit, OnDestroy {
     });
   }
 
-  makeTransaction(amount: any, type: 'CREDIT' | 'DEBIT') {
+  onTransactionTypeChange(newType: 'CREDIT' | 'DEBIT') {
+    this.transactionType = newType;
+    this.amount = null;
+    this.description = '';
+  }
+
+  makeTransaction(amount: number, type: 'CREDIT' | 'DEBIT') {
+    if (this.isLoading) {
+      return;
+    }
+    if (amount < 0) {
+      this.snackBar.open('Amount cannot be negative', 'Dismiss', { duration: 3000 });
+      return;
+    }
     const transactionAmount = type === 'CREDIT' ? amount : -amount;
     const walletId = localStorage.getItem('walletId');
     if (!walletId) return;
@@ -85,9 +98,12 @@ export class MakeTransactionComponent implements OnInit, OnDestroy {
       description: this.description 
     }).subscribe(
       (res) => {
-        this.wallet.balance = res.balance;
+        this.wallet.balance = this.convertToDecimalPlaces(res.balance, 4);
         this.isLoading = false;
         this.snackBar.open('Transaction successful', 'Dismiss', { duration: 3000 });
+        this.amount = null;
+        this.description = '';
+        this.transactionType = 'CREDIT';
       },
       (error) => {
         this.isLoading = false;
@@ -98,6 +114,25 @@ export class MakeTransactionComponent implements OnInit, OnDestroy {
 
   convertToDecimalPlaces(value: number, numberOfDigits: number) {
     return parseFloat(value.toFixed(numberOfDigits));
+  }
+
+  onAmountInput(event: any): void {
+    const inputValue: string = event.target.value;
+    if (inputValue.includes('.')) {
+      const parts = inputValue.split('.');
+      if (parts[1].length > 4) {
+        // Limit decimals to 4 places
+        const trimmed = parts[0] + '.' + parts[1].substring(0, 4);
+        event.target.value = trimmed;
+        this.amount = parseFloat(trimmed);
+      }
+    }
+  }
+
+  preventMinus(event: KeyboardEvent): void {
+    if (event.key === '-') {
+      event.preventDefault();
+    }
   }
 
   ngOnDestroy(): void {

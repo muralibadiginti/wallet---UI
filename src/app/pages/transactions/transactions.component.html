@@ -33,7 +33,7 @@
               'credit-amount': tx.type === 'CREDIT',
               'debit-amount': tx.type === 'DEBIT'
             }">
-              {{tx.amount | currency}}
+              {{tx.amount | currency:'INR':'symbol':'1.2-2'}}
             </mat-cell>
           </ng-container>
 
@@ -50,7 +50,7 @@
 
           <ng-container matColumnDef="balance">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Balance</mat-header-cell>
-            <mat-cell *matCellDef="let tx">{{tx.balance | currency}}</mat-cell>
+            <mat-cell *matCellDef="let tx">{{tx.balance | currency:'INR':'symbol':'1.2-2'}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="description">

@@ -41,7 +41,7 @@
           <mat-card-title>Transaction Details</mat-card-title>
           <mat-card-content>
             <div class="toggle-container">
-              <mat-button-toggle-group class="custom-toggle-group" [(ngModel)]="transactionType" aria-label="Transaction Type">
+              <mat-button-toggle-group class="custom-toggle-group" [(ngModel)]="transactionType" (ngModelChange)="onTransactionTypeChange($event)" aria-label="Transaction Type">
                 <mat-button-toggle value="CREDIT">Credit</mat-button-toggle>
                 <mat-button-toggle value="DEBIT">Debit</mat-button-toggle>
               </mat-button-toggle-group>
@@ -49,7 +49,7 @@
             <div class="form-container">
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Amount</mat-label>
-                <input matInput type="number" [(ngModel)]="amount" name="amount" placeholder="Enter amount">
+                <input matInput type="number" min="0" step="0.0001" [(ngModel)]="amount" (input)="onAmountInput($event)" (keydown)="preventMinus($event)" name="amount" placeholder="Enter amount">
               </mat-form-field>
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Description</mat-label>
@@ -58,7 +58,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions class="transaction-actions">
-            <button mat-raised-button color="accent" (click)="makeTransaction(amount, transactionType)" [disabled]="!amount || !description">
+            <button mat-raised-button color="accent" (click)="makeTransaction(amount!, transactionType)" [disabled]="isLoading || !amount || amount < 0 || !description">
               Submit Transaction
             </button>
           </mat-card-actions>
