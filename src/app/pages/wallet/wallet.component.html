@@ -11,7 +11,7 @@
       <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Username</mat-label>
-          <input matInput formControlName="name" required>
+          <input matInput formControlName="name" required (input)="onUsernameInput($event)">
           <mat-icon matPrefix>person</mat-icon>
           <mat-error *ngIf="authForm.get('name')?.hasError('required')">
             Name is required

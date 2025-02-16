@@ -71,7 +71,7 @@ export class WalletComponent implements OnInit {
 
   // Helper method to check if amount is valid
   isValidAmount(amount: number): boolean {
-    return amount >= 0 && Number.isInteger(amount * 100);
+    return amount >= 0 && Number.isInteger(amount * 10000);
   }
 
   onBalanceInput(event: any): void {
@@ -93,6 +93,13 @@ export class WalletComponent implements OnInit {
     this.authForm.get('balance')?.setValue(value ? parseFloat(value) : null);
   }
 
+  // New method to remove white spaces from the username input
+  onUsernameInput(event: any): void {
+    let value = event.target.value;
+    value = value.replace(/\s+/g, '');
+    this.authForm.get('name')?.setValue(value, { emitEvent: false });
+  }
+
   toggleAuthMode(): void {
     this.isSignUp = !this.isSignUp;
     if (!this.isSignUp) {
@@ -111,7 +118,7 @@ export class WalletComponent implements OnInit {
 
     const balance = this.authForm.get('balance')?.value;
     if (this.isSignUp && !this.isValidAmount(balance)) {
-      this.notificationService.showError('Please enter a valid positive amount with up to 2 decimal places');
+      this.notificationService.showError('Please enter a valid positive amount with up to 4 decimal places');
       return;
     }
 
