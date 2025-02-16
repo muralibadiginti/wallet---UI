@@ -60,7 +60,7 @@ export class WalletComponent implements OnInit {
         Validators.min(0),
         (control: AbstractControl) => {
           const value = control.value;
-          if (value && (value < 0 || !Number.isInteger(value * 100))) {
+          if (value !== null && (value < 0 || !Number.isInteger(value * 10000))) {
             return { invalidAmount: true };
           }
           return null;
@@ -80,13 +80,13 @@ export class WalletComponent implements OnInit {
     // Remove any non-numeric characters except decimal point
     value = value.replace(/[^\d.]/g, '');
     
-    // Ensure only two decimal places
+    // Ensure only four decimal places
     const parts = value.split('.');
     if (parts.length > 2) {
       value = parts[0] + '.' + parts.slice(1).join('');
     }
-    if (parts.length === 2 && parts[1].length > 2) {
-      value = parts[0] + '.' + parts[1].slice(0, 2);
+    if (parts.length === 2 && parts[1].length > 4) {
+      value = parts[0] + '.' + parts[1].slice(0, 4);
     }
     
     // Update form control value
@@ -143,5 +143,11 @@ export class WalletComponent implements OnInit {
   myValidator(control: AbstractControl): { [key: string]: any } | null {
     // Add custom validation logic as needed
     return null;
+  }
+
+  preventMinus(event: KeyboardEvent): void {
+    if (event.key === '-') {
+      event.preventDefault();
+    }
   }
 }
