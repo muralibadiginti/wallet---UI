@@ -1,0 +1,245 @@
+/* wallet.component.css */
+
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+
+
+
+.error-message {
+  color: red; /* Change to any color you like */
+  /* font-weight: bold; */
+  margin-top: 5px;
+}
+
+
+.back-button {
+  font-family: 'Material Icons';
+  font-size: 24px; /* Adjust size as needed */
+  cursor: pointer;
+  color: #333; /* Adjust color */
+  display: flex;
+  align-items: center;
+}
+.input-container {
+  display: flex;
+  flex-direction: column; /* Stack inputs vertically */
+  gap: 10px; /* Adds spacing between inputs */
+  max-width: 300px; /* Adjust width as needed */
+}
+
+input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%; /* Makes inputs take full width */
+}
+
+
+.back-button:hover {
+  color: #007bff; /* Change color on hover */
+}
+.toggle-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.toggle-link span {
+  color: #3498db;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toggle-link span:hover {
+  color: #2980b9;
+}
+
+textarea {
+  width: 130%; /* Adjust width as needed */
+  height: 100px; /* Set desired height */
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Allows resizing only vertically */
+}
+
+.wallet-card {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  margin: 50px auto;
+  max-width: 500px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.wallet-card h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 12px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: calc(100% - 26px);
+  padding: 14px;
+  border: 1px solid #bdc3c7;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #f8f9fa;
+  color: #333;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
+  background-color: #fff;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+  outline: none;
+  border: 1px solid #3498db;
+}
+
+.form-group input[type="text"]:focus + label,
+.form-group input[type="number"]:focus + label {
+  color: #3498db;
+}
+
+.wallet-card button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-card button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.wallet-card button:disabled {
+  background-color: #ccc; /* Gray out disabled button */
+  cursor: default;
+}
+
+
+.wallet-details {
+  margin-top: 32px;
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+}
+
+.wallet-details h3 {
+  margin-bottom: 16px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.wallet-details p {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.wallet-details strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.transaction-section {
+  margin-top: 32px;
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+}
+
+.transaction-section h3 {
+  margin-bottom: 16px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.toggle-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.toggle-group button {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #eee;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-group button.active {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.toggle-group button:hover {
+    background-color: #ddd;
+}
+
+.transaction-section .button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.transaction-section .button-group button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-section .button-group button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+/* Include Poppins font (add this to your HTML <head> section) */
+/*<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">*/

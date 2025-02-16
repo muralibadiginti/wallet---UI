@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+th {
+  cursor: pointer;
+  position: relative;
+  padding-right: 20px; /* Space for the arrow */
+}
+
+th.sorted {
+  font-weight: bold;
+}
+
+th span {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+th span.asc::after {
+  content: "▲";
+  color: green;
+}
+
+th span.desc::after {
+  content: "▼";
+  color: red;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.no-data img {
+  display: block;
+  margin: 0 auto;
+}
+
+.back-button {
+  font-family: 'Material Icons';
+  font-size: 24px; /* Adjust size as needed */
+  cursor: pointer;
+  color: #333; /* Adjust color */
+  display: flex;
+  align-items: center;
+}
+
+.back-button:hover {
+  color: #007bff; /* Change color on hover */
+}
+
+
+.transaction-history {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  margin: 50px auto;
+  max-width: 950px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.transaction-history h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-history table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.transaction-history th,
+.transaction-history td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.2s ease;
+}
+
+.transaction-history th {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.transaction-history tr {
+  background-color: #fff;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.transaction-history tr:hover {
+  background-color: #f5f5f5;
+}
+
+.transaction-history td {
+  color: #333;
+}
+
+.controls,
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.transaction-history button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-history button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.transaction-history button:disabled {
+  background-color: #bdc3c7;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+  color: #7f8c8d;
+}
+
+.transaction-history .pagination span {
+  margin: 0 12px;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+  .transaction-history {
+      padding: 30px;
+  }
+
+  .transaction-history table {
+      font-size: 15px;
+  }
+
+  .transaction-history th,
+  .transaction-history td {
+      padding: 12px 16px;
+  }
+
+  .controls,
+  .pagination {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+  }
+
+  .transaction-history button {
+      font-size: 15px;
+      padding: 10px 18px;
+  }
+}

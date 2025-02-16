@@ -1,0 +1,70 @@
+<div class="transaction-history">
+  <div class="header-content">
+    <a title="Go to Home"> 
+      <i class="material-icons back-button" (click)="goHomePage()">arrow_back</i>
+    </a>
+  </div>
+
+  <h2 *ngIf="transactions.length">Transaction History</h2>
+
+  <div class="table-container" *ngIf="transactions.length; else noDataTemplate">
+    <table>
+      <thead>
+        <tr>
+          <th (click)="sortTable('_id')" [class.sorted]="sortedColumn === '_id'">
+            Transaction Id <span [class.asc]="sortedColumn === '_id' && sortAscending"
+                     [class.desc]="sortedColumn === '_id' && !sortAscending"></span>
+          </th>
+          <th (click)="sortTable('date')" [class.sorted]="sortedColumn === 'date'">
+            Date <span [class.asc]="sortedColumn === 'date' && sortAscending"
+                     [class.desc]="sortedColumn === 'date' && !sortAscending"></span>
+          </th>
+          <th (click)="sortTable('amount')" [class.sorted]="sortedColumn === 'amount'">
+            Amount <span [class.asc]="sortedColumn === 'amount' && sortAscending"
+                         [class.desc]="sortedColumn === 'amount' && !sortAscending"></span>
+          </th>
+          <th (click)="sortTable('type')" [class.sorted]="sortedColumn === 'type'">
+            Type <span [class.asc]="sortedColumn === 'type' && sortAscending"
+                      [class.desc]="sortedColumn === 'type' && !sortAscending"></span>
+          </th>
+          <th (click)="sortTable('balance')" [class.sorted]="sortedColumn === 'balance'">
+            Balance <span [class.asc]="sortedColumn === 'balance' && sortAscending"
+                         [class.desc]="sortedColumn === 'balance' && !sortAscending"></span>
+          </th>
+          <th (click)="sortTable('description')" [class.sorted]="sortedColumn === 'description'">
+            Description <span [class.asc]="sortedColumn === 'description' && sortAscending"
+                             [class.desc]="sortedColumn === 'description' && !sortAscending"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tx of paginatedTransactions">
+          <td>{{ tx.walletId }}</td>
+          <td>{{ tx.date }}</td>
+          <td>{{ tx.amount }}</td>
+          <td>{{ tx.type }}</td>
+          <td>{{ tx.balance }}</td>
+          <td>{{ tx.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noDataTemplate>
+    <div class="no-data">
+      <img src="assets/no-data.png" alt="No data available" width="600" height="400"/>
+      <p>No Transactions Found!!!</p>
+    </div>
+  </ng-template>
+
+  <div class="controls">
+    <button (click)="exportCSV()" *ngIf="transactions.length > 0">Export CSV</button>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination"  *ngIf="count">
+    <button (click)="previousPage()" [disabled]="page === 1">Previous</button>
+    <span>Page {{ page }} of {{ (count / pageSize) | ceil }}</span>
+    <button (click)="nextPage()" [disabled]="(page * pageSize) >= count">Next</button>
+  </div>
+</div>

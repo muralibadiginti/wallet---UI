@@ -1,0 +1,34 @@
+<div class="wallet-card">
+  <h2 *ngIf="isSignUp">Sign Up - Wallet Setup</h2>
+  <h2 *ngIf="!isSignUp">Sign In - Wallet Setup</h2>
+
+  <div>
+    <form [formGroup]="authForm" (ngSubmit)="isSignUp ? setupWallet() : login()">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" type="text" formControlName="name" placeholder="Enter your name" required />
+        <div *ngIf="authForm.get('name')?.invalid && (authForm.get('name')?.dirty || authForm.get('name')?.touched)">
+          <div class="error-message" *ngIf="authForm.get('name')?.errors?.['required']">Name is required.</div>
+        </div>
+      </div>
+      
+      <div class="form-group" *ngIf="isSignUp">
+        <label for="balance">Initial Balance:</label>
+        <input id="balance" type="number" formControlName="balance" placeholder="Enter initial balance" required />
+        <div *ngIf="authForm.get('balance')?.invalid && (authForm.get('balance')?.dirty || authForm.get('balance')?.touched)">
+          <div class="error-message" *ngIf="authForm.get('balance')?.errors?.['required']">Balance is required.</div>
+          <div class="error-message" *ngIf="authForm.get('balance')?.errors?.['min']">Balance must be greater than or equal to 0.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" [disabled]="authForm.invalid">{{ isSignUp ? 'Create Wallet' : 'Login' }}</button>
+      </div>
+    </form>
+
+    <p class="toggle-link">
+      {{ isSignUp ? 'Already have an account?' : "Don't have an account?" }}
+      <span (click)="toggleAuthMode()">{{ isSignUp ? 'Login' : 'Sign Up' }}</span>
+    </p>
+  </div>
+</div>
