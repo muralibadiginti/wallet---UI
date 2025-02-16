@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { WalletComponent } from './pages/wallet/wallet.component';
-import { TransactionsComponent } from './pages/transactions/transactions.component';
-import { makeTransactionComponent } from './pages/make-transaction/make-transaction.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: 'wallet', component: WalletComponent },
-  { path: 'transactions', component: TransactionsComponent },
-  { path: 'makeTransaction/:walletId', component: makeTransactionComponent },
+  { path: '', loadComponent: () => import('./pages/wallet/wallet.component').then(m => m.WalletComponent) },
+  { 
+    path: 'transactions', 
+    loadComponent: () => import('./pages/transactions/transactions.component').then(m => m.TransactionsComponent),
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'makeTransaction', 
+    loadComponent: () => import('./pages/make-transaction/make-transaction.component').then(m => m.makeTransactionComponent),
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

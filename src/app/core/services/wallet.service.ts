@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Wallet, Transaction, WalletCredentials } from '../core/interfaces/wallet.interface';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
+import { Wallet, Transaction, TransactionResponse, WalletCredentials } from '../interfaces/wallet.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,13 @@ export class WalletService {
     return this.http.post<Wallet>(`${this.apiUrl}/transact/${walletId}`, data);
   }
 
-  getTransactions(walletId: string, skip: number, limit: number, sortColumn: string, sortOrder: boolean): Observable<{data: Transaction[], count: number}> {
+  getTransactions(
+    walletId: string, 
+    skip: number, 
+    limit: number, 
+    sortColumn: string, 
+    sortOrder: boolean
+  ): Observable<TransactionResponse> {
     const params = new HttpParams()
       .set('walletId', walletId)
       .set('skip', skip.toString())
@@ -36,7 +42,7 @@ export class WalletService {
       .set('sortColumn', sortColumn)
       .set('sortOrder', sortOrder.toString());
 
-    return this.http.get<{data: Transaction[], count: number}>(`${this.apiUrl}/transactions`, { params });
+    return this.http.get<TransactionResponse>(`${this.apiUrl}/transactions`, { params });
   }
 
   exportTransactions(walletId: string): Observable<Blob> {
@@ -45,4 +51,4 @@ export class WalletService {
       responseType: 'blob'
     });
   }
-}
+} 

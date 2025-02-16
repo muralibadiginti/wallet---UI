@@ -1,0 +1,127 @@
+.transactions-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.transactions-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+
+    mat-card-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      margin-left: auto;
+    }
+  }
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.back-icon {
+  margin: 0;
+}
+
+.export-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border-radius: 24px;
+  height: 40px;
+}
+
+.credit-amount {
+  color: #2e7d32; /* Material green-800 */
+  font-weight: 500;
+}
+
+.debit-amount {
+  color: #c62828; /* Material red-800 */
+  font-weight: 500;
+}
+
+mat-table {
+  width: 100%;
+
+  .mat-column-date {
+    min-width: 160px;
+  }
+
+  .mat-column-amount {
+    min-width: 120px;
+    &.credit { color: #4caf50; }
+    &.debit { color: #f44336; }
+  }
+
+  .mat-column-type {
+    min-width: 100px;
+  }
+
+  .mat-column-balance {
+    min-width: 120px;
+  }
+
+  .mat-column-description {
+    min-width: 200px;
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px 0;
+  color: #666;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    color: #999;
+  }
+}
+
+mat-paginator {
+  border-top: 1px solid #eee;
+}
+
+// Animation
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+  animation: slideIn 0.3s ease-out;
+} 

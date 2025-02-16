@@ -1,50 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { WalletService } from '../../services/wallet.service';
-import { NgFor , NgIf} from '@angular/common';
+import { NgFor, NgIf, CommonModule } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { CeilPipe } from "../../ceil.pipe";
+import { CeilPipe } from '../../pipes/ceil.pipe';
+
+// Angular Material modules
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-transactions',
   standalone: true,
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css'],
-  imports: [NgFor, NgIf, CeilPipe]
+  imports: [
+    CommonModule,
+    NgFor,
+    NgIf,
+    CeilPipe,
+    MatCardModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatChipsModule,
+    MatButtonModule
+  ]
 })
 export class TransactionsComponent implements OnInit {
   transactions: any[] = [];
   walletId = localStorage.getItem('walletId');
   page: number = 1;
   pageSize: number = 5; // Adjust the number of transactions per page
-  paginatedTransactions :any= [];
+  paginatedTransactions: any[] = [];
   sortedColumn: string = 'amount'; // Default sorted column
   sortAscending: boolean = true;   // Default sorting order
-  count : number = 0;
+  count: number = 0;
 
-  constructor(private walletService: WalletService, private router : Router, private location : Location) {}
+  // Define the displayed columns for the table.
+  displayedColumns: string[] = ['date', 'amount', 'type', 'balance', 'description'];
+
+  constructor(private walletService: WalletService, private router: Router, private location: Location) {}
 
   ngOnInit() {
-    this.sortTable(this.sortedColumn);
+    this.updatePagination();
   }
 
-  sortTable(column : string) {
-    if(this.sortedColumn === column) {
+  sortTable(column: string) {
+    if (this.sortedColumn === column) {
       this.sortAscending = !this.sortAscending;
-    }else{
+    } else {
       this.sortedColumn = column;
       this.sortAscending = true;
     }
     this.updatePagination();
+  }
 
+  onSortChange(sort: Sort) {
+    this.sortTable(sort.active);
   }
 
   updatePagination() {
     const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    
     if (this.walletId) {
-      this.walletService.getTransactions(this.walletId, start, this.pageSize, this.sortedColumn, this.sortAscending).subscribe((res:any) => {
+      this.walletService.getTransactions(
+        this.walletId,
+        start,
+        this.pageSize,
+        this.sortedColumn,
+        this.sortAscending
+      ).subscribe((res: any) => {
         this.transactions = res.data;
         this.paginatedTransactions = this.transactions;
         this.count = res.count;
@@ -65,21 +97,24 @@ export class TransactionsComponent implements OnInit {
       this.updatePagination();
     }
   }
-  
+
+  // Handles paginator page events.
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.updatePagination();
+  }
 
   goHomePage() {
     this.transactions = [];
-    this.page = 0;
-    // this.router.navigate(['/']);
-    this.location.back();
-  }
-  exportCSV() {
-    if(this.walletId){
-    this.walletService.exportTransactions(this.walletId).subscribe((res:Blob) => {
-      saveAs(res,'transactions.csv')
-    });
-  }
+    this.page = 1;
+    this.router.navigate(['/makeTransaction'], { queryParams: { walletId: this.walletId } });
   }
 
-  
+  exportCSV() {
+    if (this.walletId) {
+      this.walletService.exportTransactions(this.walletId).subscribe((res: Blob) => {
+        saveAs(res, 'transactions.csv');
+      });
+    }
+  }
 }

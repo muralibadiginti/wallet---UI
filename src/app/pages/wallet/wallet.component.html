@@ -1,34 +1,68 @@
-<div class="wallet-card">
-  <h2 *ngIf="isSignUp">Sign Up - Wallet Setup</h2>
-  <h2 *ngIf="!isSignUp">Sign In - Wallet Setup</h2>
+<div class="container">
+  <mat-card class="wallet-card" [@fadeIn]>
+    <mat-card-header>
+      <mat-card-title>{{ isSignUp ? 'Create New Wallet' : 'Access Your Wallet' }}</mat-card-title>
+      <mat-card-subtitle>
+        {{ isSignUp ? 'Set up your digital wallet' : 'Welcome back' }}
+      </mat-card-subtitle>
+    </mat-card-header>
 
-  <div>
-    <form [formGroup]="authForm" (ngSubmit)="isSignUp ? setupWallet() : login()">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input id="username" type="text" formControlName="name" placeholder="Enter your name" required />
-        <div *ngIf="authForm.get('name')?.invalid && (authForm.get('name')?.dirty || authForm.get('name')?.touched)">
-          <div class="error-message" *ngIf="authForm.get('name')?.errors?.['required']">Name is required.</div>
+    <mat-card-content>
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="authForm.get('name')?.hasError('required')">
+            Name is required
+          </mat-error>
+          <mat-error *ngIf="authForm.get('name')?.hasError('minlength')">
+            Name must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+
+        @if (isSignUp) {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Initial Balance</mat-label>
+            <input matInput 
+                   type="number" 
+                   formControlName="balance" 
+                   required
+                   min="0"
+                   step="0.01"
+                   (input)="onBalanceInput($event)"
+                   placeholder="0.00">
+            <mat-icon matPrefix>account_balance_wallet</mat-icon>
+            <mat-error *ngIf="authForm.get('balance')?.hasError('required')">
+              Balance is required
+            </mat-error>
+            <mat-error *ngIf="authForm.get('balance')?.hasError('min')">
+              Balance must be greater than or equal to 0
+            </mat-error>
+            <mat-error *ngIf="authForm.get('balance')?.hasError('invalidAmount')">
+              Please enter a valid amount with up to 2 decimal places
+            </mat-error>
+          </mat-form-field>
+        }
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="authForm.invalid || loading">
+            @if (loading) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              {{ isSignUp ? 'Create Wallet' : 'Login' }}
+            }
+          </button>
         </div>
-      </div>
-      
-      <div class="form-group" *ngIf="isSignUp">
-        <label for="balance">Initial Balance:</label>
-        <input id="balance" type="number" formControlName="balance" placeholder="Enter initial balance" required />
-        <div *ngIf="authForm.get('balance')?.invalid && (authForm.get('balance')?.dirty || authForm.get('balance')?.touched)">
-          <div class="error-message" *ngIf="authForm.get('balance')?.errors?.['required']">Balance is required.</div>
-          <div class="error-message" *ngIf="authForm.get('balance')?.errors?.['min']">Balance must be greater than or equal to 0.</div>
-        </div>
-      </div>
+      </form>
 
-      <div class="form-group">
-        <button type="submit" [disabled]="authForm.invalid">{{ isSignUp ? 'Create Wallet' : 'Login' }}</button>
+      <div class="toggle-link">
+        <span>{{ isSignUp ? 'Already have a wallet?' : "Don't have a wallet?" }}</span>
+        <button mat-button color="accent" (click)="toggleAuthMode()">
+          {{ isSignUp ? 'Login' : 'Create One' }}
+        </button>
       </div>
-    </form>
-
-    <p class="toggle-link">
-      {{ isSignUp ? 'Already have an account?' : "Don't have an account?" }}
-      <span (click)="toggleAuthMode()">{{ isSignUp ? 'Login' : 'Sign Up' }}</span>
-    </p>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>

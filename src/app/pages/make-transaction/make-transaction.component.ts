@@ -4,14 +4,35 @@ import { WalletService } from '../../services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
-
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { trigger, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-make-transaction',
   standalone: true,
   templateUrl: './make-transaction.component.html',
   styleUrls: ['./make-transaction.component.css'],
-  imports: [FormsModule, NgIf, ReactiveFormsModule]
+  imports: [
+    FormsModule, NgIf, ReactiveFormsModule,
+    MatCardModule, MatIconModule, MatFormFieldModule,
+    MatInputModule, MatButtonModule, MatButtonToggleModule
+  ],
+  animations: [
+    trigger('fadeSlide', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' }))
+      ])
+    ])
+  ]
 })
 export class makeTransactionComponent implements OnInit, OnDestroy {
   walletForm: any = new FormGroup({
@@ -19,13 +40,12 @@ export class makeTransactionComponent implements OnInit, OnDestroy {
     balance: new FormControl(0)
   });
   wallet: any = null;
-  transactionType: 'CREDIT' | 'DEBIT' = 'CREDIT'; // Default to CREDIT
+  transactionType: 'CREDIT' | 'DEBIT' = 'CREDIT';
   transactionAmount: number | null = null;
   transactionSubmitted: boolean = false;
-  amount = null;
+  amount: number | null = null;
   description: string  = '';
   paramSubscription!: Subscription;
-
 
   constructor(private walletService: WalletService, public router: Router, private route: ActivatedRoute) { }
 
@@ -37,7 +57,7 @@ export class makeTransactionComponent implements OnInit, OnDestroy {
           this.wallet = res;
         });
       }
-    })
+    });
   }
 
   goHomePage() {
@@ -61,7 +81,7 @@ export class makeTransactionComponent implements OnInit, OnDestroy {
   }
 
   convertToDecimalPlaces(value: number, numberOfDigits: number) {
-    return parseFloat(value.toFixed(numberOfDigits))
+    return parseFloat(value.toFixed(numberOfDigits));
   }
 
   ngOnDestroy(): void {

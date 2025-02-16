@@ -1,70 +1,81 @@
-<div class="transaction-history">
-  <div class="header-content">
-    <a title="Go to Home"> 
-      <i class="material-icons back-button" (click)="goHomePage()">arrow_back</i>
-    </a>
-  </div>
+<div class="transactions-container">
+  <mat-card class="transactions-card">
+    <mat-card-header class="header">
+      <div class="header-left">
+        <button mat-icon-button (click)="goHomePage()" class="back-button">
+          <mat-icon class="back-icon">arrow_back</mat-icon>
+        </button>
+      </div>
+      <div class="header-center">
+        <mat-card-title>Transaction History</mat-card-title>
+      </div>
+      <div class="header-right" *ngIf="transactions && transactions.length > 0">
+        <button mat-flat-button color="primary" (click)="exportCSV()" class="export-button">
+          <mat-icon>download</mat-icon>
+          <span>Export CSV</span>
+        </button>
+      </div>
+    </mat-card-header>
 
-  <h2 *ngIf="transactions.length">Transaction History</h2>
+    <mat-card-content>
+      @if (transactions.length) {
+        <mat-table [dataSource]="paginatedTransactions" matSort 
+                   (matSortChange)="onSortChange($event)">
+          
+          <ng-container matColumnDef="date">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
+            <mat-cell *matCellDef="let tx">{{tx.date | date:'medium'}}</mat-cell>
+          </ng-container>
 
-  <div class="table-container" *ngIf="transactions.length; else noDataTemplate">
-    <table>
-      <thead>
-        <tr>
-          <th (click)="sortTable('_id')" [class.sorted]="sortedColumn === '_id'">
-            Transaction Id <span [class.asc]="sortedColumn === '_id' && sortAscending"
-                     [class.desc]="sortedColumn === '_id' && !sortAscending"></span>
-          </th>
-          <th (click)="sortTable('date')" [class.sorted]="sortedColumn === 'date'">
-            Date <span [class.asc]="sortedColumn === 'date' && sortAscending"
-                     [class.desc]="sortedColumn === 'date' && !sortAscending"></span>
-          </th>
-          <th (click)="sortTable('amount')" [class.sorted]="sortedColumn === 'amount'">
-            Amount <span [class.asc]="sortedColumn === 'amount' && sortAscending"
-                         [class.desc]="sortedColumn === 'amount' && !sortAscending"></span>
-          </th>
-          <th (click)="sortTable('type')" [class.sorted]="sortedColumn === 'type'">
-            Type <span [class.asc]="sortedColumn === 'type' && sortAscending"
-                      [class.desc]="sortedColumn === 'type' && !sortAscending"></span>
-          </th>
-          <th (click)="sortTable('balance')" [class.sorted]="sortedColumn === 'balance'">
-            Balance <span [class.asc]="sortedColumn === 'balance' && sortAscending"
-                         [class.desc]="sortedColumn === 'balance' && !sortAscending"></span>
-          </th>
-          <th (click)="sortTable('description')" [class.sorted]="sortedColumn === 'description'">
-            Description <span [class.asc]="sortedColumn === 'description' && sortAscending"
-                             [class.desc]="sortedColumn === 'description' && !sortAscending"></span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tx of paginatedTransactions">
-          <td>{{ tx.walletId }}</td>
-          <td>{{ tx.date }}</td>
-          <td>{{ tx.amount }}</td>
-          <td>{{ tx.type }}</td>
-          <td>{{ tx.balance }}</td>
-          <td>{{ tx.description }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          <ng-container matColumnDef="amount">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+            <mat-cell *matCellDef="let tx" [ngClass]="{
+              'credit-amount': tx.type === 'CREDIT',
+              'debit-amount': tx.type === 'DEBIT'
+            }">
+              {{tx.amount | currency}}
+            </mat-cell>
+          </ng-container>
 
-  <ng-template #noDataTemplate>
-    <div class="no-data">
-      <img src="assets/no-data.png" alt="No data available" width="600" height="400"/>
-      <p>No Transactions Found!!!</p>
-    </div>
-  </ng-template>
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+            <mat-cell *matCellDef="let tx">
+              <mat-chip-listbox>
+                <mat-chip-option [ngClass]="{'credit-chip': tx.type === 'CREDIT', 'debit-chip': tx.type === 'DEBIT'}" selected>
+                  {{tx.type}}
+                </mat-chip-option>
+              </mat-chip-listbox>
+            </mat-cell>
+          </ng-container>
 
-  <div class="controls">
-    <button (click)="exportCSV()" *ngIf="transactions.length > 0">Export CSV</button>
-  </div>
+          <ng-container matColumnDef="balance">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Balance</mat-header-cell>
+            <mat-cell *matCellDef="let tx">{{tx.balance | currency}}</mat-cell>
+          </ng-container>
 
-  <!-- Pagination -->
-  <div class="pagination"  *ngIf="count">
-    <button (click)="previousPage()" [disabled]="page === 1">Previous</button>
-    <span>Page {{ page }} of {{ (count / pageSize) | ceil }}</span>
-    <button (click)="nextPage()" [disabled]="(page * pageSize) >= count">Next</button>
-  </div>
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+            <mat-cell *matCellDef="let tx">{{tx.description}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [length]="count"
+                       [pageSize]="pageSize"
+                       [pageIndex]="page - 1"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+      } @else {
+        <div class="no-data">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <h3>No Transactions Found</h3>
+          <p>Start making transactions to see them here</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>
+
+

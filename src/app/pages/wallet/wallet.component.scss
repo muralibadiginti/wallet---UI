@@ -1,0 +1,91 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 84px);
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.wallet-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+
+  mat-card-header {
+    margin-bottom: 24px;
+    text-align: center;
+    display: block;
+
+    mat-card-title {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    mat-card-subtitle {
+      font-size: 16px;
+      color: #666;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+
+  button {
+    min-width: 200px;
+    padding: 8px 24px;
+    font-size: 16px;
+    
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}
+
+.toggle-link {
+  text-align: center;
+  margin-top: 16px;
+  
+  span {
+    color: #666;
+    margin-right: 8px;
+  }
+}
+
+// Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+  animation: fadeIn 0.5s ease-out;
+}
+
+mat-form-field {
+  .mat-icon {
+    color: #666;
+    margin-right: 8px;
+  }
+} 
