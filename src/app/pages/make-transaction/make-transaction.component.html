@@ -16,6 +16,7 @@
 
   <mat-card-content>
     <div *ngIf="wallet; else setupWalletTemplate">
+      <div *ngIf="isLoading" class="shimmer"></div>
       <!-- Wallet Information Section -->
       <div class="wallet-section">
         <mat-card class="wallet-details-card">

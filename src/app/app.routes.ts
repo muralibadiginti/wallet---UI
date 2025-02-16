@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   { 
     path: 'makeTransaction', 
-    loadComponent: () => import('./pages/make-transaction/make-transaction.component').then(m => m.makeTransactionComponent),
+    loadComponent: () => import('./pages/make-transaction/make-transaction.component').then(m => m.MakeTransactionComponent),
     canActivate: [AuthGuard]
   }
 ];

@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { trigger, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -34,7 +35,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
     ])
   ]
 })
-export class makeTransactionComponent implements OnInit, OnDestroy {
+export class MakeTransactionComponent implements OnInit, OnDestroy {
   walletForm: any = new FormGroup({
     name: new FormControl(''),
     balance: new FormControl(0)
@@ -46,8 +47,11 @@ export class makeTransactionComponent implements OnInit, OnDestroy {
   amount: number | null = null;
   description: string  = '';
   paramSubscription!: Subscription;
+  isLoading: boolean = false;
 
-  constructor(private walletService: WalletService, public router: Router, private route: ActivatedRoute) { }
+  constructor(private walletService: WalletService, public router: Router, private route: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     this.paramSubscription = this.route.queryParams.subscribe((params) => {
@@ -75,9 +79,21 @@ export class makeTransactionComponent implements OnInit, OnDestroy {
     const transactionAmount = type === 'CREDIT' ? amount : -amount;
     const walletId = localStorage.getItem('walletId');
     if (!walletId) return;
-    this.walletService.transact(walletId, { amount: this.convertToDecimalPlaces(transactionAmount, 4), description: this.description }).subscribe((res) => {
-      this.wallet.balance = res.balance;
-    });
+    this.isLoading = true;
+    this.walletService.transact(walletId, { 
+      amount: this.convertToDecimalPlaces(transactionAmount, 4), 
+      description: this.description 
+    }).subscribe(
+      (res) => {
+        this.wallet.balance = res.balance;
+        this.isLoading = false;
+        this.snackBar.open('Transaction successful', 'Dismiss', { duration: 3000 });
+      },
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open('Transaction failed: ' + error.message, 'Dismiss', { duration: 3000 });
+      }
+    );
   }
 
   convertToDecimalPlaces(value: number, numberOfDigits: number) {
